@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\CategoryResource\Pages;
 use App\Models\Category;
+use Filament\Actions;
 use Filament\Forms;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -16,8 +17,8 @@ class CategoryResource extends Resource
     protected static ?string $model = Category::class;
 
     protected static \BackedEnum|string|null $navigationIcon  = 'heroicon-o-tag';
-    protected static \UnitEnum|string|null $navigationGroup = 'Catalog';
-    protected static ?int                  $navigationSort  = 2;
+    protected static \UnitEnum|string|null   $navigationGroup = 'Catalog';
+    protected static ?int                    $navigationSort  = 2;
 
     public static function form(Schema $schema): Schema
     {
@@ -85,12 +86,12 @@ class CategoryResource extends Resource
                 Tables\Filters\TernaryFilter::make('is_active')->label('Active'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Actions\EditAction::make(),
+                Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                Actions\BulkActionGroup::make([
+                    Actions\DeleteBulkAction::make(),
                 ]),
             ])
             ->defaultSort('sort_order');

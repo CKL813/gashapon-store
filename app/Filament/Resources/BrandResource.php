@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\BrandResource\Pages;
 use App\Models\Brand;
+use Filament\Actions;
 use Filament\Forms;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -15,9 +16,9 @@ class BrandResource extends Resource
 {
     protected static ?string $model = Brand::class;
 
-    protected static \BackedEnum|string|null   $navigationIcon  = 'heroicon-o-building-storefront';
-    protected static \UnitEnum|string|null    $navigationGroup = 'Catalog';
-    protected static ?int                     $navigationSort  = 3;
+    protected static \BackedEnum|string|null $navigationIcon  = 'heroicon-o-building-storefront';
+    protected static \UnitEnum|string|null   $navigationGroup = 'Catalog';
+    protected static ?int                    $navigationSort  = 3;
 
     public static function form(Schema $schema): Schema
     {
@@ -70,12 +71,12 @@ class BrandResource extends Resource
                 Tables\Filters\TernaryFilter::make('is_active')->label('Active'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Actions\EditAction::make(),
+                Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                Actions\BulkActionGroup::make([
+                    Actions\DeleteBulkAction::make(),
                 ]),
             ])
             ->defaultSort('name');

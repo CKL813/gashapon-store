@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Enums\OrderStatus;
 use App\Filament\Resources\OrderResource\Pages;
 use App\Models\Order;
+use Filament\Actions;
 use Filament\Forms;
 use Filament\Infolists;
 use Filament\Resources\Resource;
@@ -17,8 +18,8 @@ class OrderResource extends Resource
     protected static ?string $model = Order::class;
 
     protected static \BackedEnum|string|null $navigationIcon  = 'heroicon-o-shopping-cart';
-    protected static \UnitEnum|string|null $navigationGroup = 'Commerce';
-    protected static ?int                  $navigationSort  = 1;
+    protected static \UnitEnum|string|null   $navigationGroup = 'Commerce';
+    protected static ?int                    $navigationSort  = 1;
 
     public static function infolist(Schema $schema): Schema
     {
@@ -118,9 +119,9 @@ class OrderResource extends Resource
                     ->options(OrderStatus::class),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                Actions\ViewAction::make(),
 
-                Tables\Actions\Action::make('updateStatus')
+                Actions\Action::make('updateStatus')
                     ->label('Status')
                     ->icon('heroicon-o-arrow-path')
                     ->form([

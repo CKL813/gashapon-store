@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ShippingRateResource\Pages;
 use App\Models\ShippingRate;
+use Filament\Actions;
 use Filament\Forms;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -15,9 +16,9 @@ class ShippingRateResource extends Resource
     protected static ?string $model = ShippingRate::class;
 
     protected static \BackedEnum|string|null $navigationIcon  = 'heroicon-o-truck';
-    protected static \UnitEnum|string|null $navigationGroup = 'Commerce';
-    protected static ?int                  $navigationSort  = 3;
-    protected static ?string               $navigationLabel = 'Shipping Rates';
+    protected static \UnitEnum|string|null   $navigationGroup = 'Commerce';
+    protected static ?int                    $navigationSort  = 3;
+    protected static ?string                 $navigationLabel = 'Shipping Rates';
 
     public static function form(Schema $schema): Schema
     {
@@ -55,12 +56,12 @@ class ShippingRateResource extends Resource
                     ->label('Last Updated'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Actions\EditAction::make(),
+                Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                Actions\BulkActionGroup::make([
+                    Actions\DeleteBulkAction::make(),
                 ]),
             ])
             ->defaultSort('district');

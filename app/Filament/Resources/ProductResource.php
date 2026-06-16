@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Enums\ProductType;
 use App\Filament\Resources\ProductResource\Pages;
 use App\Models\Product;
+use Filament\Actions;
 use Filament\Forms;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -17,8 +18,8 @@ class ProductResource extends Resource
     protected static ?string $model = Product::class;
 
     protected static \BackedEnum|string|null $navigationIcon  = 'heroicon-o-cube';
-    protected static \UnitEnum|string|null $navigationGroup = 'Catalog';
-    protected static ?int                  $navigationSort  = 1;
+    protected static \UnitEnum|string|null   $navigationGroup = 'Catalog';
+    protected static ?int                    $navigationSort  = 1;
 
     public static function form(Schema $schema): Schema
     {
@@ -263,12 +264,12 @@ class ProductResource extends Resource
                     ->query(fn ($query) => $query->where('stock', 0)),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Actions\EditAction::make(),
+                Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                Actions\BulkActionGroup::make([
+                    Actions\DeleteBulkAction::make(),
                 ]),
             ])
             ->defaultSort('created_at', 'desc');

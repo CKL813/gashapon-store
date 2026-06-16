@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
+use Filament\Actions;
 use Filament\Forms;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -16,8 +17,8 @@ class UserResource extends Resource
     protected static ?string $model = User::class;
 
     protected static \BackedEnum|string|null $navigationIcon  = 'heroicon-o-users';
-    protected static \UnitEnum|string|null $navigationGroup = 'Users';
-    protected static ?int                  $navigationSort  = 1;
+    protected static \UnitEnum|string|null   $navigationGroup = 'Users';
+    protected static ?int                    $navigationSort  = 1;
 
     public static function form(Schema $schema): Schema
     {
@@ -115,11 +116,11 @@ class UserResource extends Resource
                 Tables\Filters\TernaryFilter::make('is_approved')->label('Approved'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                Actions\BulkActionGroup::make([
+                    Actions\DeleteBulkAction::make(),
                 ]),
             ])
             ->defaultSort('created_at', 'desc');

@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Enums\CouponType;
 use App\Filament\Resources\CouponResource\Pages;
 use App\Models\Coupon;
+use Filament\Actions;
 use Filament\Forms;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -16,8 +17,8 @@ class CouponResource extends Resource
     protected static ?string $model = Coupon::class;
 
     protected static \BackedEnum|string|null $navigationIcon  = 'heroicon-o-ticket';
-    protected static \UnitEnum|string|null $navigationGroup = 'Commerce';
-    protected static ?int                  $navigationSort  = 2;
+    protected static \UnitEnum|string|null   $navigationGroup = 'Commerce';
+    protected static ?int                    $navigationSort  = 2;
 
     public static function form(Schema $schema): Schema
     {
@@ -127,12 +128,12 @@ class CouponResource extends Resource
                 Tables\Filters\TernaryFilter::make('is_welcome')->label('Welcome Only'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Actions\EditAction::make(),
+                Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                Actions\BulkActionGroup::make([
+                    Actions\DeleteBulkAction::make(),
                 ]),
             ])
             ->defaultSort('created_at', 'desc');
