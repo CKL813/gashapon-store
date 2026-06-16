@@ -61,7 +61,7 @@ const hasFilters = () =>
             <!-- Page heading -->
             <div class="mb-8">
                 <h1 class="text-3xl font-extrabold text-slate-900">All Products</h1>
-                <p class="mt-1 text-slate-500">{{ products.meta.total }} collectibles available</p>
+                <p class="mt-1 text-slate-500">{{ products.total }} collectibles available</p>
             </div>
 
             <div class="flex flex-col gap-8 lg:flex-row">
@@ -152,7 +152,7 @@ const hasFilters = () =>
                     </div>
 
                     <!-- Pagination -->
-                    <div v-if="products.meta.last_page > 1" class="mt-10 flex items-center justify-center gap-1">
+                    <div v-if="products.last_page > 1" class="mt-10 flex items-center justify-center gap-1">
                         <template v-for="link in products.links" :key="link.label">
                             <Link v-if="link.url"
                                   :href="link.url"
