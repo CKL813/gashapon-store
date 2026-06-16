@@ -6,7 +6,14 @@
       "Bash(php -r \"require 'vendor/autoload.php'; echo class_exists\\('Filament\\\\Forms\\\\Components\\\\TextInput'\\) ? 'yes' : 'no'; echo '\\\\n'; echo class_exists\\('Filament\\\\Schemas\\\\Components\\\\TextInput'\\) ? 'schema yes' : 'schema no'; echo '\\\\n'; echo class_exists\\('Filament\\\\Forms\\\\Form'\\) ? 'form yes' : 'form no';\")",
       "Bash(php -r \"require 'vendor/autoload.php'; echo class_exists\\('Filament\\\\Infolists\\\\Components\\\\TextEntry'\\) ? 'infolist yes' : 'infolist no'; echo '\\\\n'; echo class_exists\\('Filament\\\\Infolists\\\\Infolist'\\) ? 'Infolist class yes' : 'Infolist class no';\")",
       "Bash(git add *)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(git commit -m 'feat: publish and run Spatie Permission migrations *)",
+      "Bash(php -r \"require 'vendor/autoload.php'; echo class_exists\\('Filament\\\\Tables\\\\Actions\\\\EditAction'\\) ? 'yes' : 'no'; echo '\\\\n'; echo class_exists\\('Filament\\\\Actions\\\\EditAction'\\) ? 'Actions\\\\EditAction yes' : 'no';\")",
+      "Bash(php -r ' *)",
+      "Bash(php *)",
+      "Bash(npm install *)",
+      "Bash(npm run *)"
     ]
   }
 }

@@ -1,22 +1,19 @@
 <?php
 
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\StorefrontController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+// ── Storefront ────────────────────────────────────────────────────────────────
+Route::get('/', [StorefrontController::class, 'home'])->name('home');
+Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+Route::get('/products/{slug}', [ProductController::class, 'show'])->name('products.show');
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// ── Auth / Profile ────────────────────────────────────────────────────────────
+Route::get('/dashboard', fn () => inertia('Dashboard'))
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
