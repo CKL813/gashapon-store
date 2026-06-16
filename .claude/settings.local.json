@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(php artisan *)",
+      "Bash(composer require *)",
+      "Bash(php -r \"require 'vendor/autoload.php'; echo class_exists\\('Filament\\\\Forms\\\\Components\\\\TextInput'\\) ? 'yes' : 'no'; echo '\\\\n'; echo class_exists\\('Filament\\\\Schemas\\\\Components\\\\TextInput'\\) ? 'schema yes' : 'schema no'; echo '\\\\n'; echo class_exists\\('Filament\\\\Forms\\\\Form'\\) ? 'form yes' : 'form no';\")",
+      "Bash(php -r \"require 'vendor/autoload.php'; echo class_exists\\('Filament\\\\Infolists\\\\Components\\\\TextEntry'\\) ? 'infolist yes' : 'infolist no'; echo '\\\\n'; echo class_exists\\('Filament\\\\Infolists\\\\Infolist'\\) ? 'Infolist class yes' : 'Infolist class no';\")",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
+    ]
+  }
+}
