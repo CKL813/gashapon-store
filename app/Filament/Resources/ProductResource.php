@@ -8,6 +8,7 @@ use App\Models\Product;
 use Filament\Actions;
 use Filament\Forms;
 use Filament\Resources\Resource;
+use Filament\Schemas;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -26,14 +27,14 @@ class ProductResource extends Resource
         return $schema->schema([
 
             // ── Left column (2/3 width) ──────────────────────────────────────
-            Forms\Components\Group::make()->schema([
+            Schemas\Components\Group::make()->schema([
 
-                Forms\Components\Section::make('Basic Info')->schema([
+                Schemas\Components\Section::make('Basic Info')->schema([
                     Forms\Components\TextInput::make('name')
                         ->required()
                         ->maxLength(255)
                         ->live(onBlur: true)
-                        ->afterStateUpdated(fn (Forms\Set $set, ?string $state) => $set('slug', Str::slug($state ?? ''))),
+                        ->afterStateUpdated(fn (Schemas\Components\Utilities\Set $set, ?string $state) => $set('slug', Str::slug($state ?? ''))),
 
                     Forms\Components\TextInput::make('slug')
                         ->required()
@@ -59,7 +60,7 @@ class ProductResource extends Resource
                         ->columnSpanFull(),
                 ])->columns(2),
 
-                Forms\Components\Section::make('Product Type & Pricing')->schema([
+                Schemas\Components\Section::make('Product Type & Pricing')->schema([
                     Forms\Components\ToggleButtons::make('product_type')
                         ->label('Product Type')
                         ->options([
@@ -99,7 +100,7 @@ class ProductResource extends Resource
                         ->default(0),
                 ])->columns(2),
 
-                Forms\Components\Section::make('Variants')
+                Schemas\Components\Section::make('Variants')
                     ->description('Add size/color options. Leave empty if product has no variants.')
                     ->schema([
                         Forms\Components\Repeater::make('variants')
@@ -148,7 +149,7 @@ class ProductResource extends Resource
                             ->addActionLabel('Add Variant'),
                     ])->collapsible(),
 
-                Forms\Components\Section::make('SEO')->schema([
+                Schemas\Components\Section::make('SEO')->schema([
                     Forms\Components\TextInput::make('meta_title')
                         ->maxLength(255)
                         ->placeholder('Defaults to product name'),
@@ -161,9 +162,9 @@ class ProductResource extends Resource
             ])->columnSpan(2),
 
             // ── Right column (1/3 width) ─────────────────────────────────────
-            Forms\Components\Group::make()->schema([
+            Schemas\Components\Group::make()->schema([
 
-                Forms\Components\Section::make('Status')->schema([
+                Schemas\Components\Section::make('Status')->schema([
                     Forms\Components\Select::make('category_id')
                         ->relationship('category', 'name')
                         ->searchable()
@@ -180,7 +181,7 @@ class ProductResource extends Resource
                         ->label('Featured'),
                 ]),
 
-                Forms\Components\Section::make('Images')->schema([
+                Schemas\Components\Section::make('Images')->schema([
                     Forms\Components\SpatieMediaLibraryFileUpload::make('images')
                         ->collection('images')
                         ->multiple()

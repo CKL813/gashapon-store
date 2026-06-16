@@ -9,6 +9,7 @@ use Filament\Actions;
 use Filament\Forms;
 use Filament\Infolists;
 use Filament\Resources\Resource;
+use Filament\Schemas;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -24,7 +25,7 @@ class OrderResource extends Resource
     public static function infolist(Schema $schema): Schema
     {
         return $schema->schema([
-            Infolists\Components\Section::make('Order Summary')->schema([
+            Schemas\Components\Section::make('Order Summary')->schema([
                 Infolists\Components\TextEntry::make('id')
                     ->label('Order #'),
 
@@ -54,7 +55,7 @@ class OrderResource extends Resource
                 Infolists\Components\TextEntry::make('notes')->placeholder('—'),
             ])->columns(2),
 
-            Infolists\Components\Section::make('Shipping Address')->schema([
+            Schemas\Components\Section::make('Shipping Address')->schema([
                 Infolists\Components\TextEntry::make('shipping_address')
                     ->formatStateUsing(fn ($state) => collect($state)
                         ->filter()
@@ -63,7 +64,7 @@ class OrderResource extends Resource
                     ->label('Address'),
             ]),
 
-            Infolists\Components\Section::make('Items')->schema([
+            Schemas\Components\Section::make('Items')->schema([
                 Infolists\Components\RepeatableEntry::make('items')->schema([
                     Infolists\Components\TextEntry::make('product_name')->label('Product'),
                     Infolists\Components\TextEntry::make('variant.name')->label('Variant')->placeholder('—'),

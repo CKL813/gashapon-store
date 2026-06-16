@@ -7,6 +7,7 @@ use App\Models\User;
 use Filament\Actions;
 use Filament\Forms;
 use Filament\Resources\Resource;
+use Filament\Schemas;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -23,7 +24,7 @@ class UserResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->schema([
-            Forms\Components\Section::make('Account')->schema([
+            Schemas\Components\Section::make('Account')->schema([
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
@@ -47,7 +48,7 @@ class UserResource extends Resource
                     ->maxLength(30),
             ])->columns(2),
 
-            Forms\Components\Section::make('B2B / Wholesale')->schema([
+            Schemas\Components\Section::make('B2B / Wholesale')->schema([
                 Forms\Components\Toggle::make('is_b2b')
                     ->label('B2B Account')
                     ->helperText('Marks this user as a wholesale buyer.')
@@ -56,14 +57,14 @@ class UserResource extends Resource
                 Forms\Components\Toggle::make('is_approved')
                     ->label('Approved for Wholesale')
                     ->helperText('Must be approved before wholesale prices are applied.')
-                    ->visible(fn (Forms\Get $get) => (bool) $get('is_b2b')),
+                    ->visible(fn (Schemas\Components\Utilities\Get $get) => (bool) $get('is_b2b')),
 
                 Forms\Components\TextInput::make('company_name')
                     ->maxLength(255)
-                    ->visible(fn (Forms\Get $get) => (bool) $get('is_b2b')),
+                    ->visible(fn (Schemas\Components\Utilities\Get $get) => (bool) $get('is_b2b')),
             ])->columns(2),
 
-            Forms\Components\Section::make('Roles')->schema([
+            Schemas\Components\Section::make('Roles')->schema([
                 Forms\Components\Select::make('roles')
                     ->relationship('roles', 'name')
                     ->multiple()

@@ -8,6 +8,7 @@ use App\Models\Coupon;
 use Filament\Actions;
 use Filament\Forms;
 use Filament\Resources\Resource;
+use Filament\Schemas;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -23,13 +24,13 @@ class CouponResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->schema([
-            Forms\Components\Section::make('Coupon Details')->schema([
+            Schemas\Components\Section::make('Coupon Details')->schema([
                 Forms\Components\TextInput::make('code')
                     ->required()
                     ->unique(ignoreRecord: true)
                     ->maxLength(50)
                     ->helperText('e.g. WELCOME10, SUMMER20')
-                    ->afterStateUpdated(fn (Forms\Set $set, ?string $state) => $set('code', strtoupper($state ?? '')))
+                    ->afterStateUpdated(fn (Schemas\Components\Utilities\Set $set, ?string $state) => $set('code', strtoupper($state ?? '')))
                     ->live(onBlur: true),
 
                 Forms\Components\ToggleButtons::make('type')
@@ -41,7 +42,7 @@ class CouponResource extends Resource
                 Forms\Components\TextInput::make('value')
                     ->required()
                     ->numeric()
-                    ->prefix(fn (Forms\Get $get) => $get('type') === 'percent' ? '%' : '$')
+                    ->prefix(fn (Schemas\Components\Utilities\Get $get) => $get('type') === 'percent' ? '%' : '$')
                     ->minValue(0),
 
                 Forms\Components\TextInput::make('min_order_amount')
@@ -62,7 +63,7 @@ class CouponResource extends Resource
                     ->placeholder('Never'),
             ])->columns(2),
 
-            Forms\Components\Section::make('Settings')->schema([
+            Schemas\Components\Section::make('Settings')->schema([
                 Forms\Components\Toggle::make('is_active')
                     ->label('Active')
                     ->default(true),
@@ -73,7 +74,7 @@ class CouponResource extends Resource
                     ->reactive(),
             ])->columns(2),
 
-            Forms\Components\Section::make('Usage')->schema([
+            Schemas\Components\Section::make('Usage')->schema([
                 Forms\Components\TextInput::make('used_count')
                     ->numeric()
                     ->default(0)

@@ -7,6 +7,7 @@ use App\Models\ShippingRate;
 use Filament\Actions;
 use Filament\Forms;
 use Filament\Resources\Resource;
+use Filament\Schemas;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -23,7 +24,7 @@ class ShippingRateResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->schema([
-            Forms\Components\Section::make()->schema([
+            Schemas\Components\Section::make()->schema([
                 Forms\Components\TextInput::make('district')
                     ->required()
                     ->unique(ignoreRecord: true)
