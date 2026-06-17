@@ -111,7 +111,8 @@ watch(() => form.value.shipping.district, () => {
 
 let stripeInstance: any = null;
 let elementsInstance:  any = null;
-const stripeReady = ref(false);
+const stripeReady    = ref(false);
+const isConfirming   = ref(false);
 
 async function submitOrder(): Promise<void> {
     errors.value      = {};
@@ -189,8 +190,11 @@ async function initStripe(clientSecret: string): Promise<void> {
 async function confirmPayment(): Promise<void> {
     if (! stripeInstance || ! elementsInstance) return;
 
-    stripeError.value = null;
-    phase.value       = 'processing';
+    stripeError.value  = null;
+    isConfirming.value = true;
+    // Do NOT change phase here — switching away from 'payment' unmounts
+    // #stripe-payment-element, detaching the Stripe Element and causing
+    // "ready event has not been emitted" IntegrationError.
 
     try {
         const { error, paymentIntent } = await stripeInstance.confirmPayment({
@@ -198,25 +202,23 @@ async function confirmPayment(): Promise<void> {
             confirmParams: {
                 return_url: `${window.location.origin}/orders/${orderId.value}/confirmation`,
             },
-            // Cards (and most test scenarios) succeed without a browser redirect;
-            // only redirect when the payment method actually requires it (e.g. 3D Secure).
+            // Cards succeed without a browser redirect; only redirect when
+            // the payment method actually requires it (e.g. 3D Secure).
             redirect: 'if_required',
         });
 
         if (error) {
             stripeError.value = error.message ?? 'Payment failed. Please try again.';
-            phase.value       = 'payment';
         } else if (paymentIntent?.status === 'succeeded') {
-            // No redirect required — navigate to the confirmation page manually.
+            phase.value = 'processing'; // safe now — element no longer needed
             window.location.href = `/orders/${orderId.value}/confirmation`;
         } else {
             stripeError.value = 'Unexpected payment status. Please contact support.';
-            phase.value       = 'payment';
         }
     } catch (e: any) {
-        // Catches Stripe IntegrationErrors (element not ready, etc.)
         stripeError.value = e?.message ?? 'Payment processing error. Please try again.';
-        phase.value       = 'payment';
+    } finally {
+        isConfirming.value = false;
     }
 }
 
@@ -497,14 +499,16 @@ function fieldError(key: string): string | undefined {
                                     <span class="rounded bg-slate-100 px-2 py-1">FPS / PayMe — coming soon</span>
                                 </div>
 
-                                <button @click="confirmPayment" :disabled="!stripeReady"
+                                <button @click="confirmPayment"
+                                        :disabled="!stripeReady || isConfirming"
                                         :class="[
                                             'w-full rounded-xl py-4 font-bold text-white shadow transition',
-                                            stripeReady
+                                            stripeReady && !isConfirming
                                                 ? 'bg-orange-500 hover:bg-orange-600 active:scale-[0.98]'
                                                 : 'cursor-wait bg-orange-300',
                                         ]">
                                     <span v-if="!stripeReady">Loading payment form…</span>
+                                    <span v-else-if="isConfirming">⏳ Processing…</span>
                                     <span v-else>Pay ${{ fmt(total) }} Now</span>
                                 </button>
 
