@@ -111,6 +111,7 @@ watch(() => form.value.shipping.district, () => {
 
 let stripeInstance: any = null;
 let elementsInstance:  any = null;
+const stripeReady = ref(false);
 
 async function submitOrder(): Promise<void> {
     errors.value      = {};
@@ -181,6 +182,7 @@ async function initStripe(clientSecret: string): Promise<void> {
     const paymentEl  = elementsInstance.create('payment', {
         layout: 'tabs',
     });
+    paymentEl.on('ready', () => { stripeReady.value = true; });
     paymentEl.mount('#stripe-payment-element');
 }
 
@@ -190,22 +192,31 @@ async function confirmPayment(): Promise<void> {
     stripeError.value = null;
     phase.value       = 'processing';
 
-    const { error, paymentIntent } = await stripeInstance.confirmPayment({
-        elements: elementsInstance,
-        confirmParams: {
-            return_url: `${window.location.origin}/orders/${orderId.value}/confirmation`,
-        },
-        // Cards (and most test scenarios) succeed without a browser redirect;
-        // only redirect when the payment method actually requires it (e.g. 3D Secure).
-        redirect: 'if_required',
-    });
+    try {
+        const { error, paymentIntent } = await stripeInstance.confirmPayment({
+            elements: elementsInstance,
+            confirmParams: {
+                return_url: `${window.location.origin}/orders/${orderId.value}/confirmation`,
+            },
+            // Cards (and most test scenarios) succeed without a browser redirect;
+            // only redirect when the payment method actually requires it (e.g. 3D Secure).
+            redirect: 'if_required',
+        });
 
-    if (error) {
-        stripeError.value = error.message ?? 'Payment failed. Please try again.';
+        if (error) {
+            stripeError.value = error.message ?? 'Payment failed. Please try again.';
+            phase.value       = 'payment';
+        } else if (paymentIntent?.status === 'succeeded') {
+            // No redirect required — navigate to the confirmation page manually.
+            window.location.href = `/orders/${orderId.value}/confirmation`;
+        } else {
+            stripeError.value = 'Unexpected payment status. Please contact support.';
+            phase.value       = 'payment';
+        }
+    } catch (e: any) {
+        // Catches Stripe IntegrationErrors (element not ready, etc.)
+        stripeError.value = e?.message ?? 'Payment processing error. Please try again.';
         phase.value       = 'payment';
-    } else if (paymentIntent?.status === 'succeeded') {
-        // No redirect required — navigate to the confirmation page manually.
-        window.location.href = `/orders/${orderId.value}/confirmation`;
     }
 }
 
@@ -486,9 +497,15 @@ function fieldError(key: string): string | undefined {
                                     <span class="rounded bg-slate-100 px-2 py-1">FPS / PayMe — coming soon</span>
                                 </div>
 
-                                <button @click="confirmPayment"
-                                        class="w-full rounded-xl bg-orange-500 py-4 font-bold text-white shadow transition hover:bg-orange-600 active:scale-[0.98]">
-                                    Pay ${{ fmt(total) }} Now
+                                <button @click="confirmPayment" :disabled="!stripeReady"
+                                        :class="[
+                                            'w-full rounded-xl py-4 font-bold text-white shadow transition',
+                                            stripeReady
+                                                ? 'bg-orange-500 hover:bg-orange-600 active:scale-[0.98]'
+                                                : 'cursor-wait bg-orange-300',
+                                        ]">
+                                    <span v-if="!stripeReady">Loading payment form…</span>
+                                    <span v-else>Pay ${{ fmt(total) }} Now</span>
                                 </button>
 
                                 <p class="mt-3 text-center text-xs text-slate-400">
