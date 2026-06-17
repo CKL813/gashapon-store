@@ -13,6 +13,13 @@ class DatabaseSeeder extends Seeder
 
     public function run(): void
     {
+        // ── Admin user ────────────────────────────────────────────────────────
+        $admin = User::firstOrCreate(
+            ['email' => 'admin@gashapon.test'],
+            ['name' => 'Admin', 'password' => bcrypt('password')],
+        );
+        $admin->assignRole('admin');
+
         // ── Test user ─────────────────────────────────────────────────────────
         User::firstOrCreate(
             ['email' => 'test@example.com'],

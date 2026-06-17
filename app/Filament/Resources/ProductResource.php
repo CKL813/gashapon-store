@@ -217,13 +217,14 @@ class ProductResource extends Resource
                     ->sortable()
                     ->placeholder('—'),
 
-                Tables\Columns\BadgeColumn::make('product_type')
+                Tables\Columns\TextColumn::make('product_type')
                     ->label('Type')
-                    ->colors([
-                        'info'    => 'specific',
-                        'warning' => 'random',
-                    ])
-                    ->formatStateUsing(fn ($state) => $state === 'random' ? 'Random Capsule' : 'Specific'),
+                    ->badge()
+                    ->color(fn (ProductType $state) => match ($state) {
+                        ProductType::Random   => 'warning',
+                        ProductType::Specific => 'info',
+                    })
+                    ->formatStateUsing(fn (ProductType $state) => $state->label()),
 
                 Tables\Columns\TextColumn::make('price')
                     ->money('USD')

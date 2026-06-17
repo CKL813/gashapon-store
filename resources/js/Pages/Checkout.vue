@@ -190,18 +190,22 @@ async function confirmPayment(): Promise<void> {
     stripeError.value = null;
     phase.value       = 'processing';
 
-    const { error } = await stripeInstance.confirmPayment({
+    const { error, paymentIntent } = await stripeInstance.confirmPayment({
         elements: elementsInstance,
         confirmParams: {
             return_url: `${window.location.origin}/orders/${orderId.value}/confirmation`,
         },
+        // Cards (and most test scenarios) succeed without a browser redirect;
+        // only redirect when the payment method actually requires it (e.g. 3D Secure).
+        redirect: 'if_required',
     });
 
     if (error) {
-        // confirmPayment only rejects synchronously on immediate errors;
-        // successful payments redirect away automatically.
         stripeError.value = error.message ?? 'Payment failed. Please try again.';
         phase.value       = 'payment';
+    } else if (paymentIntent?.status === 'succeeded') {
+        // No redirect required — navigate to the confirmation page manually.
+        window.location.href = `/orders/${orderId.value}/confirmation`;
     }
 }
 
