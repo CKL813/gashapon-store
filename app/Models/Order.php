@@ -25,6 +25,8 @@ class Order extends Model
         'guest_name',
         'guest_email',
         'notes',
+        'stripe_payment_intent_id',
+        'stripe_payment_status',
     ];
 
     protected $casts = [

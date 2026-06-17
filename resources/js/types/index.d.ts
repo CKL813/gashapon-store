@@ -95,3 +95,79 @@ export interface PaginationLink {
     label: string;
     active: boolean;
 }
+
+export interface ShippingDistrict {
+    district: string;
+    rate: number;
+}
+
+export interface AppliedCoupon {
+    id: number;
+    code: string;
+    type: 'fixed' | 'percent';
+    value: number;
+    discount: number;
+}
+
+export interface OrderItem {
+    id: number;
+    quantity: number;
+    unit_price: number;
+    total_price: number;
+    product_name: string;
+    product_sku: string;
+    snapshot: {
+        id: number;
+        name: string;
+        sku: string | null;
+        price: number;
+        variant_name: string | null;
+        image_url: string | null;
+    };
+}
+
+export interface Order {
+    id: number;
+    status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled' | 'refunded';
+    customer_name: string;
+    customer_email: string;
+    shipping_address: {
+        name: string;
+        phone: string | null;
+        address_line_1: string;
+        address_line_2?: string;
+        district: string;
+        city: string;
+    };
+    subtotal: number;
+    shipping_cost: number;
+    discount: number;
+    total: number;
+    coupon_code: string | null;
+    notes: string | null;
+    created_at: string;
+    items: OrderItem[];
+}
+
+export interface CheckoutForm {
+    contact: {
+        name: string;
+        email: string;
+        phone: string;
+    };
+    shipping: {
+        address_line_1: string;
+        address_line_2: string;
+        district: string;
+        city: string;
+    };
+    billing_same: boolean;
+    billing: {
+        address_line_1: string;
+        address_line_2: string;
+        district: string;
+        city: string;
+    };
+    coupon_code: string;
+    notes: string;
+}

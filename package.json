@@ -23,6 +23,7 @@
         "vue-tsc": "^2.0.24"
     },
     "dependencies": {
+        "@stripe/stripe-js": "^9.8.0",
         "pinia": "^3.0.4"
     }
 }

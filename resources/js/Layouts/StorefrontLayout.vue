@@ -153,9 +153,13 @@ const cartOpen = ref(false);
                             <span>Total</span>
                             <span class="text-orange-600">${{ cart.total.toFixed(2) }}</span>
                         </div>
-                        <Link :href="route('home')"
+                        <Link :href="route('cart.index')" @click="cartOpen = false"
+                              class="block w-full rounded-xl border border-orange-500 py-2.5 text-center text-sm font-semibold text-orange-600 transition hover:bg-orange-50">
+                            View Cart
+                        </Link>
+                        <Link :href="route('checkout.index')" @click="cartOpen = false"
                               class="block w-full rounded-xl bg-orange-500 py-3 text-center font-semibold text-white transition hover:bg-orange-600">
-                            Checkout
+                            Checkout →
                         </Link>
                     </div>
                 </div>
